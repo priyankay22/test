@@ -2,8 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vmName": {
-            "type": "string"
+        "sophosvm_Name": {
+            "type": "string",
+            "defaultValue":"sophosvm"
         },
         "vmSize": {
             "type": "string"
@@ -28,12 +29,31 @@
         },
         "location":{
             "type": "string"
+        },
+         "imagePublisher": {
+            "defaultValue": "sophos",
+            "type": "string"
+        },
+         "imageOffer": {
+            "defaultValue": "sophos-xg",
+            "type": "string"
+        },
+         "imageSKU": {
+            "defaultValue": "payg-new",
+            "type": "string"
+        },
+        "storageAccountName":{
+          "type": "string",
+            "metadata": {
+                "description": "Storage Account Name"
+        },
+             "sophosvm_Password": {
+            "defaultValue": null,
+            "type": "securestring"
         }
     },
     "variables": {
-        "imagePublisher": "sophos",
-        "imageOffer": "sophos-xg",
-        "adminUsername": "azureuser"
+       
     },
     "resources": [
         {
