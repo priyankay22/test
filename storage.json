@@ -23,7 +23,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageAccountName')]",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2019-06-01",
             "location": "[parameters('location')]",
             "properties": {
 
@@ -36,7 +36,7 @@
     ],
     "outputs": {
         "storageAccountEndpoint": {
-            "value": "[reference(parameters('storageAccountName'), '2015-06-15').primaryEndpoints.blob]",
+            "value": "[reference(parameters('storageAccountName'), '2019-06-01').primaryEndpoints.blob]",
             "type": "string"
         }
     }
