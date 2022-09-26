@@ -1,0 +1,135 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sophosvm_Name": {
+            "type": "string",
+            "defaultValue":"sophosvm"
+        },
+        "vmSize": {
+            "type": "string"
+        },
+       "sophosvm_Password": {
+            "defaultValue": null,
+            "type": "securestring"
+        },
+        "imageSku": {
+            "type": "string"
+        },
+        "availabilitySetName": {
+            "type": "string"
+        },
+        "storageAccountEndpoint": {
+            "type": "string"
+        },
+         "networkInterfaces_PortA_name": {
+            "defaultValue": "PortA",
+            "type": "string"
+        },
+        "networkInterfaces_PortB_name": {
+            "defaultValue": "PortB",
+            "type": "string"
+        },
+        "location":{
+            "type": "string"
+        },
+         "imagePublisher": {
+            "defaultValue": "sophos",
+            "type": "string"
+        },
+         "imageOffer": {
+            "defaultValue": "sophos-xg",
+            "type": "string"
+        },
+         "imageSKU": {
+            "defaultValue": "payg-new",
+            "type": "string"
+        },
+        "storageAccountName":{
+          "type": "string",
+            "metadata": {
+                "description": "Storage Account Name"
+        },
+             "sophosvm_Password": {
+            "defaultValue": null,
+            "type": "securestring"
+        }
+    },
+    "variables": {
+       
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-07-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName')]",
+            "plan": {
+                "publisher": "[variables('imagePublisher')]",
+                "product": "[variables('imageOffer')]",
+                "name": "[parameters('imageSku')]"
+            },
+            "location": "[parameters('location')]",
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('sophosvm_Name')]",
+                    "adminUsername": "azureuser",
+                    "adminPassword": "[parameters('sophosvm_Password')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('imagePublisher')]",
+                        "offer": "[variables('imageOffer')]",
+                        "sku": "[parameters('imageSku')]",
+                        "version": "latest"
+                    },
+                    "dataDisks": [
+                        {
+                            "name": "[concat(parameters('sophosvm_Name'),'-dataDisk')]",
+                            "lun": 0,
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Standard_LRS"
+                            }
+                        }
+                    ],
+                    "osDisk": {
+                        "name": "[concat(parameters('sophosvm_Name'),'-osDisk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_PortA_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_PortB_name'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[parameters('storageAccountEndpoint')]"
+                    }
+                }
+            }
+        }
+    ]
+}
