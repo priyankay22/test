@@ -64,8 +64,8 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
             "plan": {
-                "publisher": "[variables('imagePublisher')]",
-                "product": "[variables('imageOffer')]",
+                "publisher": "[parameters('imagePublisher')]",
+                "product": "[parameters('imageOffer')]",
                 "name": "[parameters('imageSku')]"
             },
             "location": "[parameters('location')]",
@@ -83,8 +83,8 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "[variables('imagePublisher')]",
-                        "offer": "[variables('imageOffer')]",
+                        "publisher": "[parameters('imagePublisher')]",
+                        "offer": "[parameteres('imageOffer')]",
                         "sku": "[parameters('imageSku')]",
                         "version": "latest"
                     },
