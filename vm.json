@@ -9,22 +9,25 @@
         "vmSize": {
             "type": "string"
         },
-        "adminPassword": {
-            "type": "string"
+       "sophosvm_Password": {
+            "defaultValue": null,
+            "type": "securestring"
         },
         "imageSku": {
             "type": "string"
         },
-        "availabilitySetId": {
+        "availabilitySetName": {
             "type": "string"
         },
         "storageAccountEndpoint": {
             "type": "string"
         },
-        "interfaceRefWan": {
+         "networkInterfaces_PortA_name": {
+            "defaultValue": "PortA",
             "type": "string"
         },
-        "interfaceRefLan": {
+        "networkInterfaces_PortB_name": {
+            "defaultValue": "PortB",
             "type": "string"
         },
         "location":{
@@ -68,15 +71,15 @@
             "location": "[parameters('location')]",
             "properties": {
                 "availabilitySet": {
-                    "id": "[parameters('availabilitySetId')]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmName')]",
-                    "adminUsername": "[variables('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "computerName": "[parameters('sophosvm_Name')]",
+                    "adminUsername": "azureuser",
+                    "adminPassword": "[parameters('sophosvm_Password')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -87,7 +90,7 @@
                     },
                     "dataDisks": [
                         {
-                            "name": "[concat(parameters('vmName'),'-dataDisk')]",
+                            "name": "[concat(parameters('sophosvm_Name'),'-dataDisk')]",
                             "lun": 0,
                             "createOption": "FromImage",
                             "managedDisk": {
@@ -96,7 +99,7 @@
                         }
                     ],
                     "osDisk": {
-                        "name": "[concat(parameters('vmName'),'-osDisk')]",
+                        "name": "[concat(parameters('sophosvm_Name'),'-osDisk')]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
@@ -107,13 +110,13 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[parameters('interfaceRefWan')]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_PortA_name'))]",
                             "properties": {
                                 "primary": true
                             }
                         },
                         {
-                            "id": "[parameters('interfaceRefLan')]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_PortB_name'))]",
                             "properties": {
                                 "primary": false
                             }
