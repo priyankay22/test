@@ -62,11 +62,11 @@
         {
             "apiVersion": "2019-07-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
+            "name": "[parameters('sophosvm_Name')]",
             "plan": {
-                "publisher": "[variables('imagePublisher')]",
-                "product": "[variables('imageOffer')]",
-                "name": "[parameters('imageSku')]"
+                "publisher": "[parameters('imagePublisher')]",
+                "product": "[parameters('imageOffer')]",
+                "name": "[parameters('imageSKU')]"
             },
             "location": "[parameters('location')]",
             "properties": {
