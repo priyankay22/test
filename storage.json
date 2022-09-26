@@ -36,7 +36,7 @@
     ],
     "outputs": {
         "storageAccountEndpoint": {
-            "value": "[reference(parameters('storageAccountName'), '2019-06-01').primaryEndpoints.blob]",
+            "value": "[reference(parameters('storageAccountName'), '2015-06-15').primaryEndpoints.blob]",
             "type": "string"
         }
     }
