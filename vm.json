@@ -44,11 +44,6 @@
          "imageSKU": {
             "defaultValue": "payg-new",
             "type": "string"
-        },
-        "storageAccountName":{
-          "type": "string",
-            "metadata": {
-                "description": "Storage Account Name"
         }
     
     "variables": {
