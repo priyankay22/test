@@ -57,7 +57,7 @@
             "plan": {
                 "publisher": "[parameters('imagePublisher')]",
                 "product": "[parameters('imageOffer')]",
-                "name": "[parameters('imageSku')]"
+                "name": "[parameters('imageSKU')]"
             },
             "location": "[parameters('location')]",
             "properties": {
