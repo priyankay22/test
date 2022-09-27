@@ -26,12 +26,6 @@
             "defaultValue": "2012-R2-Datacenter",
             "type": "string"
         },
-        "storageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Storage Account Name"
-            }
-        },
          "windowsvm_Password": {
             "defaultValue": "windowspassword",
             "type": "securestring"
@@ -45,6 +39,9 @@
             "type": "string"
         }
     },
+      "storageAccountEndpoint": {
+            "type": "string"
+        }
     "variables": {},
     "resources": [
         {
