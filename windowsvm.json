@@ -66,9 +66,9 @@
                     "osDisk": {
                         "name": "[parameters('windowsvm_name')]",
                         "createOption": "FromImage",
-                        "vhd": {
-                            "uri": "[concat('https', '://', parameters('storageAccountName'), '.blob.core.windows.net', concat('/vhds/', parameters('windowsvm_name'),'20170309181343.vhd'))]"
-                        },
+                          "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
                         "caching": "ReadWrite"
                     },
                     "dataDisks": []
@@ -89,7 +89,14 @@
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nic_windowsvm_name'))]"
                         }
                     ]
+                },
+                 "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[parameters('storageAccountEndpoint')]"
+                    }
                 }
+                
             }
         }
     ]
