@@ -49,12 +49,8 @@
           "type": "string",
             "metadata": {
                 "description": "Storage Account Name"
-        },
-             "sophosvm_Password": {
-            "defaultValue": null,
-            "type": "securestring"
         }
-    },
+    
     "variables": {
        
     },
