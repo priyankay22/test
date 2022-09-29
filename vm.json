@@ -40,11 +40,8 @@
          "imageOffer": {
             "defaultValue": "sophos-xg",
             "type": "string"
-        },
-         "imageSKU": {
-            "defaultValue": "payg-new",
-            "type": "string"
         }
+        
     
     "variables": {
        
