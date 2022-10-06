@@ -12,8 +12,8 @@
             "type": "string"
         },
         "privateip": {
-            "type": "string",
-            "defaultValue":"172.18.1.10"
+            "type": "string"
+            
         },
         "linuxpip": {
             "type": "string"
