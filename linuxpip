@@ -13,7 +13,7 @@
         },
        "publicdnsprefix": {
         "type": "string"
-       },
+       }
     },
   
     "resources": [
