@@ -1,100 +1,96 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "string",
-            "defaultValue": "westus"
-        },
-       "windowsvm_name": {
-            "defaultValue": "windowsvm",
-            "type": "string"
-        },
-         "windowsVmSize": {
-            "defaultValue": "Standard_A2_v2",
-            "type": "string"
-        },
-        "imagePublisher": {
-            "defaultValue": "MicrosoftWindowsServer",
-            "type": "string"
-        },
-         "imageOffer": {
-            "defaultValue": "WindowsServer",
-            "type": "string"
-        },
-         "imageSKU": {
-            "defaultValue": "2012-R2-Datacenter",
-            "type": "string"
-        },
-         "windowsvm_Password": {
-            "defaultValue": "windowspassword",
-            "type": "securestring"
-        },
-        "nic_windowsvm_name": {
-            "defaultValue": "nic",
-            "type": "securestring"
-        } ,
-        "windowsUserName":{
-            "defaultValue": "clientuser",
-            "type": "string"
-        }
+      "vm-name":{
+          "type":"string"
+      },
+  
+      "vmsize": {
+        "type": "string"
+      },
+      "adminUsername": {
+        "type": "string"
+        
+      },
+      "authenticationType": {
+        "type": "string"
+      },
+      "adminPassword": {
+        "type": "securestring"
+      },
+      "location": {
+        "type": "string"
+      },
+       "linux_publisher":{
+          "type": "string"
+      },
+      "linux_imageOffer": {
+        "type": "string"
+      },
+      "linuxsku": {
+        "type": "string"
+      },
+      "storageAccountEndpoint":{
+        "type": "string"
+      },
+      "linux_nic":{
+        "type": "string"
+      },
+      "apiVersion": {
+        "type": "string"
+      }
     },
-      "storageAccountEndpoint": {
-            "type": "string"
-        }
-    "variables": {},
+    "variables": {
+      
+    },
     "resources": [
-        {
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('windowsvm_name')]",
-            "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('windowsVmSize')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "[parameters('imagePublisher')]",
-                        "offer": "[parameters('imageOffer')]",
-                        "sku": "[parameters('imageSKU')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "[parameters('windowsvm_name')]",
-                        "createOption": "FromImage",
-                          "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
-                        }
-                        "caching": "ReadWrite"
-                    },
-                    "dataDisks": []
-                },
-                "osProfile": {
-                    "computerName": "[parameters('windowsvm_name')]",
-                    "adminUsername": "[parameters('windowsUserName')]",
-                    "windowsConfiguration": {
-                        "provisionVMAgent": true,
-                        "enableAutomaticUpdates": true
-                    },
-                    "secrets": [],
-                    "adminPassword": "[parameters('windowsvm_Password')]"
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nic_windowsvm_name'))]"
-                        }
-                    ]
-                },
-                 "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": "true",
-                        "storageUri": "[parameters('storageAccountEndpoint')]"
-                    }
-                }
-                
+    {
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[parameters('vm-name')]",
+        "location": "[parameters('location')]",
+        "apiVersion": "[parameters('apiVersion')]",
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[parameters('vmsize')]"
+          },
+          "osProfile": {
+            "computerName": "[parameters('vm-name')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+            
+          },
+          "storageProfile": {
+            "imageReference": {
+                "publisher":"[parameters('linux_publisher')]",
+                "offer":"[parameters('linux_imageOffer')]",
+                "sku":"[parameters('linuxsku')]",
+                "version":"latest"
+            },
+            "osDisk": {
+              "name": "[concat(parameters('vm-name'),'_OSDisk')]",
+              "caching": "ReadWrite",
+              "createOption": "FromImage",
+              "managedDisk":{
+                "storageAccountType":"Standard_LRS"
+              }
             }
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('linux_nic'))]"
+              }
+            ]
+          },
+          "diagnosticsProfile": {
+            "bootDiagnostics": {
+              "enabled": true,
+              "storageUri": "[parameters('storageAccountEndpoint')]"
+            }
+          }
         }
+      }
+   
     ]
-}
+  }
