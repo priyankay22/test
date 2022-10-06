@@ -14,12 +14,7 @@
       }
     },
     "ubuntuOSVersion": {
-      "type": "string",
-      "allowedValues": [
-        "18.04-LTS",
-        "16.04-LTS",
-        "14.04.4-LTS"
-      ],
+      "type": "string"
       "metadata": {
         "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values are: 16.04-LTS, 14.04.4-LTS."
       }
