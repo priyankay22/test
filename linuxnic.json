@@ -31,6 +31,7 @@
                 "name":"ipConfig1",
                 "properties":{
                     "privateIPAddress":"[parameters('privateip')]",
+                    "privateIPAllocationMethod":"Static",
                     "publicIPAddress":{
                         "id":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('linuxpip'))]"
                     },
