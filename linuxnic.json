@@ -28,7 +28,7 @@
         "location":"[parameters('location')]",
         "properties":{
             "ipConfigurations":{
-                "name":"ipConfig1",
+                "name":"ipconfig1",
                 "properties":{
                     "privateIPAddress":"[parameters('privateip')]",
                     "privateIPAllocationMethod":"Static",
@@ -47,6 +47,6 @@
 
     }
        
-    ],
-    "outputs": {}
+    ]
+   
 }
