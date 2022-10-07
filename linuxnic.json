@@ -5,9 +5,6 @@
         "linuxnic_name":{
             "type":"string"
         },
-        "apiVersion": {
-            "type": "string"
-        },
         "location": {
             "type": "string"
         },
@@ -27,7 +24,7 @@
         {
         "type": "Microsoft.Network/networkInterfaces",
         "name":"[parameters('linuxnic_name')]",
-        "apiVersion":"[parameters('apiVersion')]",
+        "apiVersion":"2015-06-15",
         "location":"[parameters('location')]",
         "properties":{
             "ipConfigurations":{
