@@ -24,7 +24,7 @@
         {
         "type": "Microsoft.Network/networkInterfaces",
         "name":"[parameters('linuxnic_name')]",
-        "apiVersion":"2015-06-15",
+        "apiVersion":"2016-03-30",
         "location":"[parameters('location')]",
         "properties":{
             "ipConfigurations":{
