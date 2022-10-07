@@ -28,7 +28,7 @@
         "location":"[parameters('location')]",
         "properties":{
             "ipConfigurations":{
-                "name":"ipconfig2",
+                "name":"ipConfig1",
                 "properties":{
                     "privateIPAddress":"[parameters('privateip')]",
                     "publicIPAddress":{
