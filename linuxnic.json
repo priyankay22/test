@@ -27,7 +27,8 @@
         "apiVersion":"2016-03-30",
         "location":"[parameters('location')]",
         "properties":{
-            "ipConfigurations":{
+            "ipConfigurations":[
+                {
                 "name":"ipConfig1",
                 "properties":{
                     "privateIPAddress":"[parameters('privateip')]",
@@ -39,7 +40,7 @@
                         "id":"[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworks_xgvnet_name')),'/subnets/LAN')]"
                     }
                 }
-            }
+            }]
         }
       
 
