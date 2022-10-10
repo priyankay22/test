@@ -59,7 +59,16 @@
                         },
                         "caching": "ReadWrite"
                     },
-                    "dataDisks": []
+                   
+                     "dataDisks": [
+                             {
+                                 "name":"[concat(parameters('windowsvm_name'),'-DataDisk')]",
+                             "diskSizeGB": 1023,
+                               "lun": 0,
+                              "createOption": "Empty"
+                                         }
+          ]
+                    ]
                 },
                 "osProfile": {
                     "computerName": "[parameters('windowsvm_name')]",
