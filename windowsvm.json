@@ -68,7 +68,7 @@
                               "createOption": "Empty"
                                          }
           ]
-                    ]
+                    
                 },
                 "osProfile": {
                     "computerName": "[parameters('windowsvm_name')]",
