@@ -3,14 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sophosvm_Name": {
-            "type": "string",
-            "defaultValue":"sophosvm"
+            "type": "string"
         },
         "vmSize": {
             "type": "string"
         },
        "sophosvm_Password": {
-            "defaultValue": null,
+        
             "type": "securestring"
         },
         "imageSku": {
@@ -23,22 +22,22 @@
             "type": "string"
         },
          "networkInterfaces_PortA_name": {
-            "defaultValue": "PortA",
+         
             "type": "string"
         },
         "networkInterfaces_PortB_name": {
-            "defaultValue": "PortB",
+     
             "type": "string"
         },
         "location":{
             "type": "string"
         },
          "imagePublisher": {
-            "defaultValue": "sophos",
+         
             "type": "string"
         },
          "imageOffer": {
-            "defaultValue": "sophos-xg",
+          
             "type": "string"
         }
         
