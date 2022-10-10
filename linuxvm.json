@@ -36,10 +36,8 @@
       },
       "linux_nic":{
         "type": "string"
-      },
-      "apiVersion": {
-        "type": "string"
       }
+    
     },
     "variables": {
       
@@ -49,7 +47,7 @@
         "type": "Microsoft.Compute/virtualMachines",
         "name": "[parameters('vm-name')]",
         "location": "[parameters('location')]",
-        "apiVersion": "[parameters('apiVersion')]",
+        "apiVersion": "2015-06-15",
         "properties": {
           "hardwareProfile": {
             "vmSize": "[parameters('vmsize')]"
