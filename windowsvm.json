@@ -38,7 +38,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('windowsvm_name')]",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-04-01",
             "location": "[parameters('location')]",
             "properties": {
                 "hardwareProfile": {
@@ -61,12 +61,7 @@
                     },
                    
                      "dataDisks": [
-                             {
-                                 "name":"[concat(parameters('windowsvm_name'),'-DataDisk')]",
-                             "diskSizeGB": 1023,
-                               "lun": 0,
-                              "createOption": "Empty"
-                                         }
+                            
           ]
                     
                 },
