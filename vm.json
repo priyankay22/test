@@ -39,7 +39,9 @@
          "imageOffer": {
           
             "type": "string"
-        },
+        }
+        
+    }
         
     
     "variables": {
