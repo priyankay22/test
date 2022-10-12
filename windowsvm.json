@@ -55,7 +55,7 @@
                         "name": "[concat(parameters('windowsvm_name'),'-OSDisk')]",
                         "createOption": "FromImage",
                         "managedDisk":{
-                            "storageAcountType":"Standard_LRS"
+                            "storageAccountType":"Standard_LRS"
                         },
                         "caching": "ReadWrite"
                     },
