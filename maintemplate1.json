@@ -1,0 +1,681 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "baseUrl": "https://raw.githubusercontent.com/sophos-iaas/xg-azure-testdrive/master",
+        "baseurlforxg":"https://raw.githubusercontent.com/priyankay22/test/master",
+        "availabilitySetName": "avset",
+        "apiVersion": "2015-01-01",
+        "location": "[resourcegroup().location]",
+        "avsetUrl": "[concat(variables('baseurlforxg'),'/availability-set.json')]",
+        "storageUrl": "[concat(variables('baseurlforxg'),'/storage.json')]",
+        "wpipUrl": "[concat(variables('baseUrl'),'/nested/public-ip.json')]",
+        "linuxpipurl":"[concat(variables('baseurl'),'/nested/public-ip.json')]",
+        "xgpipUrl": "[concat(variables('baseUrl'),'/nested/public-ip.json')]",
+        "routetableUrl": "[concat(variables('baseUrl'),'/nested/routetable.json')]",
+        "vnetUrl": "[concat(variables('baseUrl'),'/nested/vnet.json')]",
+        "nicAUrl": "[concat(variables('baseUrl'),'/nested/xg-nicA.json')]",
+        "nicBUrl": "[concat(variables('baseUrl'),'/nested/xg-nicB.json')]",
+        "windowsNicUrl": "[concat(variables('baseUrl'),'/nested/nic-windows.json')]",
+        "sophosVmUrl": "[concat(variables('baseurlforxg'),'/vm.json')]",
+        "windowsVmUrl": "[concat(variables('baseurlforxg'),'/windowsvm.json')]",
+        "linuxvmurl":"[concat(variables('baseurlforxg'),'/linuxvm.json')]",
+        "storageAccount_xg_name":"[concat(uniquestring(resourceGroup().id), 'xgsa')]",
+        "suffix": "[substring(uniqueString(resourceGroup().id), 0, 5)]",
+        "storageType": "Standard_LRS",
+        "windowspip_name": "windowspip",
+        "windowsDnsPrefix": "wdns",
+        "windowsDnsName": "[concat(variables('windowsDnsPrefix'),variables('suffix'))]",
+        "xgpipwan_name": "xgpipwan",
+        "xgDnsPrefix": "xgdns",
+        "xgDnsName": "[concat(variables('xgDnsPrefix'),variables('suffix'))]",
+        "nsg_xgfrontend_name": "xgfrontend",
+        "nsg_windowsbackend_name": "windowsbackend",
+        "routeTable_name": "xglanrt",
+        "routeName": "route_all_xgfirewall",
+        "routeAddressPrefix": "0.0.0.0/0",
+        "routeHopType": "VirtualAppliance",
+        "routeHopIpAddress": "172.18.1.4",
+        "virtualNetworks_xgvnet_name": "xgvnet",
+        "vnetAddressPrefix": "172.18.0.0/16",
+        "routeTables_xglanrt_name": "xglanrt",
+        "subnet1Name": "WAN",
+        "subnet1AddressPrefix": "172.18.0.0/24",
+        "subnet2Name": "LAN",
+        "subnet2AddressPrefix": "172.18.1.0/24",
+        "nic_PortA_name": "PortA",
+        "nic_PortA_PrivateIp": "172.18.0.4",
+        "nic_PortB_name": "PortB",
+        "nic_PortB_PrivateIp": "172.18.1.4",
+        "nic_windows": "windowsnic",
+        "nic_windowsPrivateIp": "172.18.1.5",
+        "sophosvm": "xgvm",
+        "sophosVmPassword": "XgPassword@123",
+        "vmSize": "Standard_F2s_v2",
+        "imagePublisher": "sophos",
+        "imageOffer": "sophos-xg",
+        "imageSKU": "payg-new",
+        "windowsVmName": "clientVm",
+        "windowsVmSize": "Standard_A2_v2",
+        "windows_ImagePublisher": "MicrosoftWindowsServer",
+        "windows_ImageOffer": "WindowsServer",
+        "windows_ImageSKU": "2012-R2-Datacenter",
+        "windowsvm_Password": "Clientpassword@123",
+        "windowsUserName": "clientuser",
+        "linuxvm":"linuxmachine",
+        "linuxvmsize":"Standard_A1_V2",
+        "linux_imagesku":"18.04-LTS",
+        "linuxusername":"linuxuser",
+        "authenticationType":"password",
+        "linuxpassword":"Clientpassword@123",
+        "linux_publisher":"Canonical",
+        "Linux_imageoffer":"UbuntuServer",
+        "linuxnicurl":"[concat(variables('baseurlforxg'),'/linuxnic.json')]",
+        "nic_linux":"linuxnic",
+        "nic_linuxPrivateIp":"172.18.1.10",
+        "linuxpip":"[concat(variables('linuxvm'),'pip')]",
+        "linuxdns":"ldns",
+        "linuxDnsName": "[concat(variables('linuxdns'),variables('suffix'))]"
+      
+    
+    },
+    "resources": [
+        {
+            "name": "avSetUp",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('avsetUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "availabilitySetName": {
+                        "value": "[variables('availabilitySetName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "storageSetUp",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "storageAccountName": {
+                        "value": "[variables('storageAccount_xg_name')]"
+                    },
+                    "storageAccountType": {
+                        "value": "[variables('storageType')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "windowsPipSetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('wpipUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "publicIPAddressName": {
+                        "value": "[variables('windowspip_name')]"
+                    },
+                    "publicIPdnsPrefix": {
+                        "value": "[variables('windowsDnsName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name":"linuxpipsetup",
+            "type":"Microsoft.Resources/deployments",
+            "apiVersion":"[variables('apiVersion')]",
+            "properties":{
+                "mode":"Incremental",
+                "templateLink":{
+                    "uri":"[variables('linuxpipurl')]",
+                    "contentVersion":"1.0.0.0"
+                },
+                "parameters":{
+                    "location":{
+                        "value":"[variables('location')]"
+                    },
+                    "publicIPAddressName":{
+                        "value":"[variables('linuxpip')]"
+                    },
+                    "publicIPdnsPrefix":{
+                        "value":"[variables('linuxDnsName')]"
+                    }
+
+                }
+            }
+            
+        },
+        {
+            "name": "xgPipSetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('xgpipUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "publicIPAddressName": {
+                        "value": "[variables('xgpipwan_name')]"
+                    },
+                    "publicIPdnsPrefix": {
+                        "value": "[variables('xgDnsName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('nsg_xgfrontend_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "allow_any_inbound",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allow_any_outbound",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('nsg_windowsbackend_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "deny_any_net",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type":"Microsoft.Network/networkSecurityGroups",
+            "name":"Linux-SG",
+            "apiVersion": "2016-03-30",
+            "location":"[variables('location')]",
+            "properties":{
+                "securityRules":[
+                    {
+                        "name": "deny_any_net",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "routeTableSetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('routetableUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "routeTables_xglanrt_name": {
+                        "value": "[variables('routeTable_name')]"
+                    },
+                    "routeName": {
+                        "value": "[variables('routeName')]"
+                    },
+                    "routeAddressPrefix": {
+                        "value": "[variables('routeAddressPrefix')]"
+                    },
+                    "routeHopType": {
+                        "value": "[variables('routeHopType')]"
+                    },
+                    "routeHopIpAddress": {
+                        "value": "[variables('routeHopIpAddress')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "vnetSetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkSecurityGroups/',variables('nsg_xgfrontend_name'))]",
+                "routeTableSetup"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworks_xgvnet_name": {
+                        "value": "[variables('virtualNetworks_xgvnet_name')]"
+                    },
+                    "vnetAddressPrefix": {
+                        "value": "[variables('vnetAddressPrefix')]"
+                    },
+                    "nsg_xgfrontend_name": {
+                        "value": "[variables('nsg_xgfrontend_name')]"
+                    },
+                    "routeTables_xglanrt_name": {
+                        "value": "[variables('routeTables_xglanrt_name')]"
+                    },
+                    "subnet1Name": {
+                        "value": "[variables('subnet1Name')]"
+                    },
+                    "subnet1AddressPrefix": {
+                        "value": "[variables('subnet1AddressPrefix')]"
+                    },
+                    "subnet2Name": {
+                        "value": "[variables('subnet2Name')]"
+                    },
+                    "subnet2AddressPrefix": {
+                        "value": "[variables('subnet2AddressPrefix')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "nicA",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "xgPipSetup",
+                "vnetSetup"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('nicAUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "nic_Port_Name": {
+                        "value": "[variables('nic_PortA_name')]"
+                    },
+                    "Port_PrivateIp": {
+                        "value": "[variables('nic_PortA_PrivateIp')]"
+                    },
+                    "publicIPAddress_xgpipwan_name": {
+                        "value": "[variables('xgpipwan_name')]"
+                    },
+                    "virtualNetworks_xgvnet_name": {
+                        "value": "[variables('virtualNetworks_xgvnet_name')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "nicB",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "vnetSetup"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('nicBUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "nic_Port_Name": {
+                        "value": "[variables('nic_PortB_name')]"
+                    },
+                    "Port_PrivateIp": {
+                        "value": "[variables('nic_PortB_PrivateIp')]"
+                    },
+                    "virtualNetworks_xgvnet_name": {
+                        "value": "[variables('virtualNetworks_xgvnet_name')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "windowsNic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "windowsPipSetup",
+                "vnetSetup"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('windowsNicUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "nic_Port_Name": {
+                        "value": "[variables('nic_windows')]"
+                    },
+                    "Port_PrivateIp": {
+                        "value": "[variables('nic_windowsPrivateIp')]"
+                    },
+                    "publicIPAddresses_windowspip_name": {
+                        "value": "[variables('windowspip_name')]"
+                    },
+                    "virtualNetworks_xgvnet_name": {
+                        "value": "[variables('virtualNetworks_xgvnet_name')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name":"linux-nic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion":"[variables('apiVersion')]",
+            "dependsOn":[
+                "[resourceId('Microsoft.Resources/deployments', 'vnetSetup')]",
+                "[resourceId('Microsoft.Resources/deployments', 'linuxpipsetup')]"
+            ],
+            "properties":{
+                "mode":"Incremental",
+                "templateLink":{
+                    "uri":"[variables('linuxnicurl')]",
+                    "contentVersion":"1.0.0.0"   
+                },
+                "parameters":{
+                    "linuxnic_name":{
+                        "value":"[variables('nic_linux')]"
+                    },
+                    "privateip":{
+                        "value":"[variables('nic_linuxPrivateIp')]"
+                    },
+                    "linuxpip":{
+                        "value":"[variables('linuxpip')]"
+                    },
+                    "virtualNetworks_xgvnet_name":{
+                        "value":"[variables('virtualNetworks_xgvnet_name')]"
+                    },
+                    "location": {
+                        "value":"[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "sophosVmSetUp",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "avSetUp",
+                "storageSetUp",
+                "nicA",
+                "nicB"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sophosVmUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "sophosvm_Name": {
+                        "value": "[variables('sophosvm')]"
+                    },
+                    "vmSize": {
+                        "value": "[variables('vmSize')]"
+                    },
+                    "imagePublisher": {
+                        "value": "[variables('imagePublisher')]"
+                    },
+                    "imageOffer": {
+                        "value": "[variables('imageOffer')]"
+                    },
+                    "imageSku": {
+                        "value": "[variables('imageSKU')]"
+                    },
+                    "storageAccountEndpoint": {
+                        "value": "[reference('storageSetUp').outputs.storageAccountEndpoint.value]"
+                    },
+                    "sophosvm_Password": {
+                        "value": "[variables('sophosVmPassword')]"
+                    },
+                    "networkInterfaces_PortA_name": {
+                        "value": "[variables('nic_PortA_name')]"
+                    },
+                    "networkInterfaces_PortB_name": {
+                        "value": "[variables('nic_PortB_name')]"
+                    },
+                    "availabilitySetName": {
+                        "value": "[variables('availabilitySetName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "windowsVmSetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn": [
+                "windowsNic",
+                "storageSetUp"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('windowsVmUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "windowsvm_name": {
+                        "value": "[variables('windowsVmName')]"
+                    },
+                    "WindowsVmSize": {
+                        "value": "[variables('windowsVmSize')]"
+                    },
+                    "imagePublisher": {
+                        "value": "[variables('windows_ImagePublisher')]"
+                    },
+                    "imageOffer": {
+                        "value": "[variables('windows_ImageOffer')]"
+                    },
+                    "imageSKU": {
+                        "value": "[variables('windows_ImageSKU')]"
+                    },
+                    "storageAccountEndpoint": {
+                        "value": "[reference('storageSetUp').outputs.storageAccountEndpoint.value]"
+                    },
+                    "windowsvm_Password": {
+                        "value": "[variables('windowsvm_Password')]"
+                    },
+                    "nic_windowsvm_name": {
+                        "value": "[variables('nic_windows')]"
+                    },
+                    "windowsUserName": {
+                        "value": "[variables('windowsUserName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name":"linuxvmsetup",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersion')]",
+            "dependsOn":[
+                "[resourceId('Microsoft.Resources/deployments', 'storageSetUp')]",
+                "[resourceId('Microsoft.Resources/deployments', 'linux-nic')]"
+            ],
+            "properties":{
+                "mode":"Incremental",
+                "templateLink":{
+                    "uri":"[variables('linuxvmurl')]",
+                    "contentVersion":"1.0.0.0"
+                },
+                 "parameters":{
+                    "vm-name":{
+                        "value":"[variables('linuxvm')]"
+                    },
+                    "vmsize":{
+                        "value":"[variables('linuxvmsize')]"
+                    },
+                    "linux_publisher":{
+                        "value":"[variables('linux_publisher')]"
+                    },
+                    "adminUsername":{
+                        "value":"[variables('linuxusername')]"
+                    },
+                    "authenticationType":{
+                        "value":"[variables('authenticationType')]"
+                    },
+                    "adminPassword":{
+                        "value":"[variables('linuxpassword')]"
+                    },
+                    "location":{
+                        "value":"[variables('location')]"
+                    },
+                    "linux_imageOffer":{
+                        "value":"[variables('Linux_imageoffer')]"
+                    },
+                    "linuxsku":{
+                        "value":"[variables('linux_imagesku')]"
+                    },
+                     "storageAccountEndpoint": {
+                        "value": "[reference('storageSetUp').outputs.storageAccountEndpoint.value]"
+                    },
+                    "linux_nic":{
+                        "value":"[variables('nic_linux')]"
+                    }
+                   
+                    
+
+                    
+           
+           
+           
+            }
+           
+
+            }
+        }
+    ],
+    "outputs": {
+        "xgvm_access_url": {
+            "type": "string",
+            "value": "[concat('https://',reference('xgPipSetup').outputs.fqdn.value,':4444')]"
+        },
+        "xgvm_ip_address": {
+             "type": "string",
+           "value": "[reference('xgPipSetup').outputs.fqdn.value]"
+       },
+        "sophos_Access_Password": {
+            "type": "string",
+            "value": "[variables('sophosVmPassword')]"
+        },
+        "windowsUserName": {
+            "type": "string",
+            "value": "[variables('windowsUserName')]"
+        },
+        "windowsvm_Password": {
+            "type": "string",
+            "value": "[variables('windowsvm_Password')]"
+        },
+        "windowsserverIPv4address": {
+            "type": "string",
+            "value": "[variables('nic_windowsPrivateIp')]"
+        },
+        "linuxUsername": {
+            "type": "string",
+            "value": "[variables('linuxusername')]"
+        },
+        "linuxPassword": {
+            "type": "string",
+            "value": "[variables('linuxpassword')]"
+        }
+    }
+}
