@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+       "windowsvm_name": {
+            "type": "string"
+        },
+         "windowsVmSize": {
+            "type": "string"
+        },
+        "imagePublisher": {
+            "type": "string"
+        },
+         "imageOffer": {
+            "type": "string"
+        },
+         "imageSKU": {
+            "type": "string"
+        },
+        "storageAccountEndpoint": {
+            "type": "string"
+        },
+         "windowsvm_Password": {
+            "type": "securestring"
+        },
+        "nic_windowsvm_name": {
+            "type": "string"
+        } ,
+        "windowsUserName":{
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('windowsvm_name')]",
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('windowsVmSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('imagePublisher')]",
+                        "offer": "[parameters('imageOffer')]",
+                        "sku": "[parameters('imageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('windowsvm_name'),'-OSDisk')]",
+                        "createOption": "FromImage",
+                        "managedDisk":{
+                            "storageAccountType":"Standard_LRS"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                   
+                     "dataDisks": [
+                            
+          ]
+                    
+                },
+                "osProfile": {
+                    "computerName": "[parameters('windowsvm_name')]",
+                    "adminUsername": "[parameters('windowsUserName')]",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "adminPassword": "[parameters('windowsvm_Password')]"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nic_windowsvm_name'))]"
+                        }
+                    ]
+                }
+            },
+               "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[parameters('storageAccountEndpoint')]"
+                    }
+                }
+            
+        }
+    ]
+}
