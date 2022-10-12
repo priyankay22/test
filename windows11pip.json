@@ -18,7 +18,7 @@
     "resources": [
         {
             "comments": "Public IP Address Resource",
-            "apiVersion": "2015-",
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[parameters('publicIPAddressName')]",
             "location": "[parameters('location')]",
