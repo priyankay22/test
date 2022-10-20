@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "publicaddressname": {
+            "type": "string"
+        },
+       "publicdnsprefix": {
+        "type": "string"
+       }
+    },
+  
+    "resources": [
+ {
+    "name": "[parameters('publicaddressname')]",
+    "type": "Microsoft.Network/publicIPAddresses",
+    "apiVersion": "2015-06-15",
+    "location": "[parameters('location')]",
+    "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+            "domainNameLabel": "[parameters('publicdnsprefix')]"
+        }
+    }
+ }
+    ],
+    "outputs": {
+         "fqdn": {
+            "value": "[reference(parameters('publicaddressname')).dnsSettings.fqdn]",
+            "type": "string"
+        }
+    }
+}
