@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "linuxnic_name":{
+            "type":"string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "privateip": {
+            "type": "string"
+            
+        },
+        "linuxpip": {
+            "type": "string"
+        },
+        "virtualNetworks_xgvnet_name": {
+            "type": "string"
+        }
+    },
+   
+    "resources": [
+        {
+        "type": "Microsoft.Network/networkInterfaces",
+        "name":"[parameters('linuxnic_name')]",
+        "apiVersion":"2016-03-30",
+        "location":"[parameters('location')]",
+        "properties":{
+            "ipConfigurations":[
+                {
+                "name":"ipConfig1",
+                "properties":{
+                    "privateIPAddress":"[parameters('privateip')]",
+                    "privateIPAllocationMethod":"Static",
+                    "publicIPAddress":{
+                        "id":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('linuxpip'))]"
+                    },
+                    "subnet":{
+                        "id":"[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworks_xgvnet_name')),'/subnets/LAN')]"
+                    }
+                }
+            }]
+        }
+      
+
+
+
+    }
+       
+    ]
+   
+}
