@@ -3,27 +3,18 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "type": "string",
-            "defaultValue": "westus"
+            "type": "string"
         },
-        "routeTables_xglanrt_name": {
-            "defaultValue": "xglanrt",
-            "type": "String"
+        "routeTables_name": {
+             "type":"string"
         },
         "routeName": {
-            "defaultValue": "route_all_xgfirewall",
             "type": "String"
         },
         "routeAddressPrefix": {
-            "defaultValue": "0.0.0.0/0",
             "type": "string"
         },
         "routeHopType": {
-            "defaultValue": "VirtualAppliance",
-            "type": "string"
-        },
-        "routeHopIpAddress": {
-            "defaultValue": "172.18.1.4",
             "type": "string"
         }
     },
@@ -32,7 +23,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/7eab3893-bd71-4690-84a5-47624df0b0e5/resourceGroups/sophos/providers/Microsoft.Network/routeTables/xglanrt'.",
             "type": "Microsoft.Network/routeTables",
-            "name": "[parameters('routeTables_xglanrt_name')]",
+            "name": "[parameters('routeTables_name')]",
             "apiVersion": "2016-03-30",
             "location": "[parameters('location')]",
             "properties": {
@@ -41,8 +32,8 @@
                         "name": "[parameters('routeName')]",
                         "properties": {
                             "addressPrefix": "[parameters('routeAddressPrefix')]",
-                            "nextHopType": "[parameters('routeHopType')]",
-                            "nextHopIpAddress": "[parameters('routeHopIpAddress')]"
+                            "nextHopType": "[parameters('routeHopType')]"
+                          
                         }
                     }
                 ]
