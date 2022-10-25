@@ -16,6 +16,9 @@
         },
         "virtualNetworks_xgvnet_name": {
             "type": "string"
+        },
+        "networksg":{
+            "type":"string"
         }
     },
     "variables": {
@@ -37,6 +40,9 @@
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_windowspip_name'))]"
                             },
+                            "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networksg'))]"
+                             },
                             "subnet": {
                                 "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_xgvnet_name')), '/subnets/LAN')]"
                             }
