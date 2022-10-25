@@ -3,20 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "nic_Port_Name": {
-            "defaultValue": "PortB",
+          
             "type": "string"
         },
         "location": {
-            "type": "string",
-            "defaultValue": "westus"
+            "type": "string"
+          
         },
         "Port_PrivateIp": {
-            "defaultValue": "172.18.1.4",
+
             "type": "string"
         },
         "virtualNetworks_xgvnet_name": {
-            "type": "string",
-            "defaultValue": "vnet"
+            "type": "string"
+           
         }
     },
     "variables": {
