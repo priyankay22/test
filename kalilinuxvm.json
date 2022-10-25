@@ -52,6 +52,11 @@
           "hardwareProfile": {
             "vmSize": "[parameters('vmsize')]"
           },
+             "plan": {
+        "name": "[parameters('linuxsku')]",
+        "publisher": "[parameters('linux_publisher')]",
+        "product": "[parameters('linux_imageOffer')]"
+      },
           "osProfile": {
             "computerName": "[parameters('vm-name')]",
             "adminUsername": "[parameters('adminUsername')]",
