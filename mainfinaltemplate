@@ -325,7 +325,7 @@
                             "protocol": "*",
                             "sourcePortRange": "*",
                             "destinationPortRange": "22",
-                            "sourceAddressPrefix": "Internet",
+                            "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
                             "priority": 100,
