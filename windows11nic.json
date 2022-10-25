@@ -31,6 +31,9 @@
             "apiVersion": "2016-03-30",
             "location": "[parameters('location')]",
             "properties": {
+                  "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networksg'))]"
+                             },
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
@@ -40,9 +43,7 @@
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_windowspip_name'))]"
                             },
-                            "networkSecurityGroup": {
-                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networksg'))]"
-                             },
+                          
                             "subnet": {
                                 "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_xgvnet_name')), '/subnets/LAN')]"
                             }
