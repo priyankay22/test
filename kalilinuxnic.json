@@ -17,6 +17,9 @@
         },
         "virtualNetworks_xgvnet_name": {
             "type": "string"
+        },
+        "networksg":{
+            "type":"string"
         }
     },
    
@@ -27,6 +30,9 @@
         "apiVersion":"2016-03-30",
         "location":"[parameters('location')]",
         "properties":{
+            "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networksg'))]"
+                             },
             "ipConfigurations":[
                 {
                 "name":"ipConfig1",
