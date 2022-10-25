@@ -48,15 +48,16 @@
         "name": "[parameters('vm-name')]",
         "location": "[parameters('location')]",
         "apiVersion": "2018-04-01",
+         "plan": {
+                  "name": "[parameters('linuxsku')]",
+                  "publisher": "[parameters('linux_publisher')]",
+                  "product": "[parameters('linux_imageOffer')]"
+      },
         "properties": {
           "hardwareProfile": {
             "vmSize": "[parameters('vmsize')]"
           },
-             "plan": {
-        "name": "[parameters('linuxsku')]",
-        "publisher": "[parameters('linux_publisher')]",
-        "product": "[parameters('linux_imageOffer')]"
-      },
+        
           "osProfile": {
             "computerName": "[parameters('vm-name')]",
             "adminUsername": "[parameters('adminUsername')]",
